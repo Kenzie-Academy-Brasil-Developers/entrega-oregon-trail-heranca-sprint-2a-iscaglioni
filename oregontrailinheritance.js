@@ -1,26 +1,26 @@
 class Traveler {
   constructor(name) {
-    this._name = name; //string
-    this._food = 1; //number
-    this._isHealth = true; //boolean
+    this._name = name;
+    this._food = 1;
+    this._isHealth = true;
   }
   get name() {
     return this._name;
   }
-  set name(newName) {
-    this._name = newName;
+  set name(novoname) {
+    this._name = novoname;
   }
   get food() {
     return this._food;
   }
-  set food(newFood) {
-    this.food = newFood;
+  set food(novaComida) {
+    this._food = novaComida;
   }
   get isHealth() {
-    return this.isHealth;
+    return this._isHealth;
   }
-  set isHealth(newIsHealth) {
-    this.isHealth = newIsHealth;
+  set isHealth(novaSaude) {
+    this._isHealth = novaSaude;
   }
 
   hunt() {
@@ -37,92 +37,76 @@ class Traveler {
 class Wagon {
   constructor(capacity) {
     this._capacity = capacity;
-    this._passageiros = [];
+    this._passengers = [];
   }
   get capacity() {
     return this._capacity;
   }
-  set capacity(newCapacity) {
-    this._capacity = newCapacity;
+  set capacity(novaCapacidade) {
+    this._capacity = novaCapacidade;
   }
-  get passageiros() {
-    return this._passageiros;
+  get passengers() {
+    return this._passengers;
   }
-  set passageiros(newPassageiros) {
-    this._passageiros = newPassageiros;
+  set passengers(novosPassageiros) {
+    this._passengers = novosPassageiros;
   }
   getAvailableSeatCount() {
-    //percorrer o array de passageiros, contar
-    //retornar a capacidade menos o numero de passageiros
-    let assentosDisponiveis = this._capacity - this._passageiros.length;
-    return assentosDisponiveis;
+    return this._capacity - this._passengers.length;
   }
-  join(traveler) {
-    ///add viajante se tiver espaco
-    let assentosDisponiveis = this._capacity - this._passageiros.length;
-    if (assentosDisponiveis > 0) {
-      return this._passageiros.push(traveler);
-    } else {
-      return "Não tem espaço para ela!";
+  join(viajante) {
+    if (this._passengers.length < this._capacity) {
+      this._passengers.push(viajante); // nao deve ser um numero, deve ser um objeto
     }
   }
   shouldQuarantine() {
-    //retorna true se houver uma pessoa que nao esta saudavel ou retorna false
-    // acho que devo percorrer o objeto wagon e vericar se na propriedade is.
-
-    for (let i = 0; i < this._passageiros.length; i++) {
-      const passageiroNaPosicao = this._passageiros[i];
-
-      if (passageiroNaPosicao._isHealth === false) {
+    let resultadoQuarentena = false;
+    for (let i = 0; i < this._passengers.length; i++) {
+      if (this._passengers[i].isHealth === false) {
         return true;
       }
     }
-    return false;
+    return resultadoQuarentena;
   }
-  //provavelmente tenho que mudar o codigo na oregon trail
   totalFood() {
-    let quantidadeTotalDeComida = 0;
-    for (let i = 0; i < this._passageiros.length; i++) {
-      const passageiroNaPosicao = this._passageiros[i]._food;
-      quantidadeTotalDeComida += passageiroNaPosicao;
+    let totalDeComida = 0;
+    for (let i = 0; i < this._passengers.length; i++) {
+      totalDeComida += this._passengers[i].food;
     }
-    return quantidadeTotalDeComida;
+    return totalDeComida;
   }
 }
-//------------------Oregon Trail heranca
-// sera que preciso de um arquivo para cada classe?
 class Hunter extends Traveler {
   constructor(name) {
     super(name);
     this._food = 2;
   }
+
   hunt() {
     this._food += 5;
   }
   eat() {
-    if (this._food > 2) {
-      this._food -= 2;
-    } else if (this._food < 2) {
-      this._food = 0;
-      this._isHealth = false;
+    if (this.food >= 2) {
+      this.food -= 2;
+    } else if (this.food < 2) {
+      this.food = 0;
+      this.isHealth = false;
     }
   }
-  giveFood(passageiro, quantidadeDeComida) {
-    if (passageiro._food < 1 && this._food > 0) {
-      passageiro._food += quantidadeDeComida;
-      this._food -= quantidadeDeComida;
+  giveFood(traveler, numOFFoodUnits) {
+    if (this.food >= numOFFoodUnits) {
+      traveler.food += numOFFoodUnits;
+      this.food -= numOFFoodUnits;
     }
-    passageiro._food;
   }
 }
 class Doctor extends Traveler {
   constructor(name) {
     super(name);
   }
-  //percvorrer o objeto wagon e se houver passageiro que a saude ficou false mudar para true
-  heal(passageiro) {
-    if (passageiro._isHealth === false) {
-      passageiro._isHealth = true;
+  heal(traveler) {
+    if (traveler.isHealth === false) {
+      traveler.isHealth = true;
     }
   }
 }
@@ -180,6 +164,7 @@ console.log(
 );
 
 sarahunter.giveFood(juan, 4);
+
 sarahunter.eat(); // Ela só tem um, então ela come e fica doente
 
 console.log(
