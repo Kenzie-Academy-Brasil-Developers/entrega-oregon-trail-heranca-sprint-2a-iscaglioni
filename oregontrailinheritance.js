@@ -24,13 +24,13 @@ class Traveler {
   }
 
   hunt() {
-    this._food += 2;
+    this.food += 2;
   }
   eat() {
-    if (this._food > 0) {
-      this._food -= 1;
+    if (this.food > 0) {
+      this.food -= 1;
     } else {
-      this._isHealth = false;
+      this.isHealth = false;
     }
   }
 }
@@ -52,17 +52,17 @@ class Wagon {
     this._passengers = novosPassageiros;
   }
   getAvailableSeatCount() {
-    return this._capacity - this._passengers.length;
+    return this.capacity - this.passengers.length;
   }
   join(viajante) {
-    if (this._passengers.length < this._capacity) {
-      this._passengers.push(viajante); // nao deve ser um numero, deve ser um objeto
+    if (this.passengers.length < this.capacity) {
+      this.passengers.push(viajante); // nao deve ser um numero, deve ser um objeto
     }
   }
   shouldQuarantine() {
     let resultadoQuarentena = false;
-    for (let i = 0; i < this._passengers.length; i++) {
-      if (this._passengers[i].isHealth === false) {
+    for (let i = 0; i < this.passengers.length; i++) {
+      if (this.passengers[i].isHealth === false) {
         return true;
       }
     }
@@ -70,8 +70,8 @@ class Wagon {
   }
   totalFood() {
     let totalDeComida = 0;
-    for (let i = 0; i < this._passengers.length; i++) {
-      totalDeComida += this._passengers[i].food;
+    for (let i = 0; i < this.passengers.length; i++) {
+      totalDeComida += this.passengers[i].food;
     }
     return totalDeComida;
   }
@@ -83,7 +83,7 @@ class Hunter extends Traveler {
   }
 
   hunt() {
-    this._food += 5;
+    this.food += 5;
   }
   eat() {
     if (this.food >= 2) {
